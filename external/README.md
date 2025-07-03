@@ -4,7 +4,7 @@ This project is a modification of robustness (https://github.com/hendrycks/robus
 
 My project is to create MangoLeafDB-C, which is the corrupted MangoLeafDB, with the purpose of benchmarking CNNs that classify diseases in mango leaves.
 
-<--! The research title is: "From Code to Field: Evaluating the Robustness of Convolutional Neural Networks for Disease Diagnosis in Mango Leaves" -->
+<--! The research title is: "A Comparative Analysis of Lightweight CNNs for Robust and Efficient Mango Leaf Disease Classification" -->
 
 Dataset - MangoLeaf-DB: https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data
 
