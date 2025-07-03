@@ -15,13 +15,14 @@ The entire research pipeline, from data preparation to final analysis, is docume
 The experimental pipeline is organized as follows:
 
 1.  **Dataset Preparation**: Download the original MangoLeafDB dataset and prepare the environment. The corrupted version, MangoLeafDB-C, is generated as part of the evaluation notebooks.
-2.  **Model Training**: Train the three lightweight CNN architectures. Transfer learning is used for MobileNetV3-Small and EfficientNet-B0, while LCNN is trained from scratch.
-3.  **Model Conversion**: Convert the trained Keras models to the TensorFlow Lite (`.tflite`) format for efficiency benchmarking.
-4.  **Performance Evaluation**:
+2.  **Creating MangoLeafDB-C**: The **MangoLeafDB-C** dataset, used for robustness evaluation, was generated using an adapted script from Dan Hendrycks' [robustness repository](https://github.com/hendrycks/robustness). The modifications apply the 15 corruptions at 5 severity levels to the original MangoLeafDB images.
+3.  **Model Training**: Train the three lightweight CNN architectures. Transfer learning is used for MobileNetV3-Small and EfficientNet-B0, while LCNN is trained from scratch.
+4.  **Model Conversion**: Convert the trained Keras models to the TensorFlow Lite (`.tflite`) format for efficiency benchmarking.
+5.  **Performance Evaluation**:
     - Assess classification accuracy on the clean test dataset.
     - Measure robustness on the MangoLeafDB-C benchmark using the mean Corruption Error (mCE) metric.
     - Benchmark inference latency and model size to evaluate computational efficiency.
-5.  **Results Analysis**: Visualize and analyze the trade-offs between accuracy, robustness, and efficiency to identify Pareto-optimal models for edge deployment.
+6.  **Results Analysis**: Visualize and analyze the trade-offs between accuracy, robustness, and efficiency to identify Pareto-optimal models for edge deployment.
 
 ## How to Reproduce the Experiments
 
@@ -41,9 +42,17 @@ The experimental pipeline is organized as follows:
 
 Download the [MangoLeafDB dataset](https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data) from Kaggle and place it in a known location. The paths to the dataset will need to be updated within the notebooks.
 
-The corrupted dataset, **MangoLeafDB-C**, is generated on-the-fly by the evaluation notebooks.
+### 2. Creating MangoLeafDB-C
 
-### 2. Model Training
+The **MangoLeafDB-C** dataset, used for robustness evaluation, was generated using an adapted script from Dan Hendrycks' [robustness repository](https://github.com/hendrycks/robustness). The modifications apply the 15 corruptions at 5 severity levels to the original MangoLeafDB images.
+
+The script is located in the `external/` directory. To create the dataset:
+
+1.  Open the file `external/ImageNet-C/create_c/make_imagenet_c.py`.
+2.  Update the file to set the source path to your MangoLeafDB dataset and the destination path for the output.
+3.  Run the script to generate MangoLeafDB-C.
+
+### 3. Model Training
 
 The training process for each model is contained in its respective Jupyter notebook in the `v2/notebooks/` directory. These notebooks handle data loading, model definition, training, and saving the final weights.
 
@@ -53,7 +62,7 @@ The training process for each model is contained in its respective Jupyter noteb
 
 The trained models in `.keras` format are saved to `v2/models/`. The compressed `.tflite` versions used for evaluation are located in `v2/models/compressed/`.
 
-### 3. Evaluation
+### 4. Evaluation
 
 The evaluation is split across multiple notebooks, each focusing on a specific aspect of performance.
 
@@ -71,27 +80,6 @@ The evaluation is split across multiple notebooks, each focusing on a specific a
   - **Latency**: `v2/notebooks/evaluate_latency.ipynb` measures inference speed (FPS).
   - **Model Size**: `v2/notebooks/evaluate_size.ipynb` compares the storage footprint of the models.
 
-### 4. Results
+### 5. Results
 
-All generated plots, tables, and raw result files are stored in the `v2/results/` directory. Key visualizations include:
-
-- `latency_vs_mce.png`: The trade-off plot between model robustness (mCE) and inference latency.
-- `mce_heatmaps.png`: A matrix of relative mCE values, comparing each model against the others.
-- `latency_distribution.png`: Box plots showing the distribution of inference times for each model.
-
-## Citation
-
-If you use this work, please cite the original paper:
-
-```bibtex
-@inproceedings{your_conference_key,
-  author    = {First Author and Second Author and Third Author},
-  title     = {A Comparative Analysis of Lightweight CNNs for Robust and Efficient Mango Leaf Disease Classification},
-  booktitle = {Conference Name},
-  year      = {2024},
-}
-```
-
-```
-
-```
+All generated plots, tables, and raw result files are stored in the `v2/results/` directory.
