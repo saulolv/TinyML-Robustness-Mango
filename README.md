@@ -1,85 +1,131 @@
 # A Comparative Analysis of Lightweight CNNs for Robust and Efficient Mango Leaf Disease Classification
 
-This repository contains all the code, notebooks, and results for the research paper, "A Comparative Analysis of Lightweight CNNs for Robust and Efficient Mango Leaf Disease Classification".
+This repository contains the code, scripts, notebooks, and results for the research paper **"A Comparative Analysis of Lightweight CNNs for Robust and Efficient Mango Leaf Disease Classification"**.
 
 ## Research Summary
 
-This study provides a comparative analysis of three lightweight Convolutional Neural Networks (CNNs)—**LCNN**, **MobileNetV3-Small**, and **EfficientNet-B0**—for the task of mango leaf disease classification. Our goal is to evaluate the critical trade-offs between model accuracy, robustness to real-world image corruptions, and computational efficiency (inference latency and model size) for practical deployment on edge devices in agriculture.
+We compare three lightweight CNNs—**LCNN**, **MobileNetV3-Small**, and **EfficientNet-B0**—for mango leaf disease classification, focusing on:
 
-To facilitate a rigorous robustness evaluation, we introduce **MangoLeafDB-C**, a new benchmark dataset. It was created by applying 15 distinct, algorithmically-generated corruptions across 5 levels of severity to the original [MangoLeafDB dataset](https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data), following the methodology established by the ImageNet-C benchmark. By benchmarking the models on both clean and corrupted data, we provide a multidimensional analysis to guide the development of more reliable and practical computer vision solutions for in-the-field plant disease diagnosis.
+- **Accuracy** on clean data
+- **Robustness** to common image corruptions (mCE) using **MangoLeafDB-C**
+- **Efficiency** for edge deployment (model size + **on-device** latency/throughput)
 
-The entire research pipeline, from data preparation to final analysis, is documented in this repository to ensure full reproducibility.
+To enable a rigorous robustness evaluation, we introduce **MangoLeafDB-C**, built from the original [MangoLeafDB dataset](https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data) by applying **19 corruption types** across **5 severity levels** (ImageNet-C protocol).
 
-## Research Pipeline
+For performance evaluation on real hardware, inference latency and throughput are measured **on-device** using TensorFlow Lite (CPU) on **Android smartphones** and a **Raspberry Pi Zero 2 W**.
 
-The experimental pipeline is organized as follows:
+## Repository Structure
 
-1.  **Dataset Preparation**: Download the original MangoLeafDB dataset and prepare the environment. The corrupted version, MangoLeafDB-C, is generated as part of the evaluation notebooks.
-2.  **Creating MangoLeafDB-C**: The **MangoLeafDB-C** dataset, used for robustness evaluation, was generated using an adapted script from Dan Hendrycks' [robustness repository](https://github.com/hendrycks/robustness). The modifications apply the 15 corruptions at 5 severity levels to the original MangoLeafDB images.
-3.  **Model Training**: Train the three lightweight CNN architectures. Transfer learning is used for MobileNetV3-Small and EfficientNet-B0, while LCNN is trained from scratch.
-4.  **Model Conversion**: Convert the trained Keras models to the TensorFlow Lite (`.tflite`) format for efficiency benchmarking.
-5.  **Performance Evaluation**:
-    - Assess classification accuracy on the clean test dataset.
-    - Measure robustness on the MangoLeafDB-C benchmark using the mean Corruption Error (mCE) metric.
-    - Benchmark inference latency and model size to evaluate computational efficiency.
-6.  **Results Analysis**: Visualize and analyze the trade-offs between accuracy, robustness, and efficiency to identify Pareto-optimal models for edge deployment.
+- **`App/RobustnessMango/`**: Android benchmark application (TFLite) used for on-device evaluation (clean accuracy + latency/throughput + corruption evaluation) and the paper sources (`artigo.tex`, `bib.bib`).
+- **`Raspberry/`**: Raspberry Pi benchmark (Python) with `evaluate.py`, plus `models/` (`.tflite`) and a dataset copy under `dataset/`.
+- **`scripts/v2/`**: Previous/legacy codebase containing the notebooks, plots, tables, and intermediate artifacts used in the experiments (training, corruption evaluation, mCE computation, desktop analysis).
+- **`external/`**: Adapted ImageNet-C code used to generate the corrupted benchmark (MangoLeafDB-C).
+- **`mangoleaf/`**: A clean dataset copy (8 classes, 4000 images) used in the experiments.
+
+## Research Pipeline (High-level)
+
+1. **Dataset preparation**: MangoLeafDB (clean) split into train/val/test.
+2. **MangoLeafDB-C generation**: 19 corruptions × 5 severity levels (95 subsets) following ImageNet-C.
+3. **Model training**: Transfer learning for MobileNetV3-Small and EfficientNet-B0; LCNN trained from scratch.
+4. **Model conversion**: Keras → TensorFlow Lite (`.tflite`) and optional compression for storage analysis.
+5. **Evaluation**:
+   - Clean accuracy (clean test set)
+   - Robustness (mCE on MangoLeafDB-C)
+   - Efficiency: model size + **on-device** latency (P90) and throughput (images/s) on Android and Raspberry Pi
+6. **Results analysis**: compare trade-offs and identify Pareto-optimal choices.
 
 ## How to Reproduce the Experiments
 
-### Prerequisites
+### Prerequisites (Python / notebooks)
 
-1.  Clone this repository:
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
-2.  Install the required Python packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
+Install the Python dependencies used by the notebooks:
+
+```bash
+pip install -r requirements.txt
+```
+
+> Note: the on-device benchmarks are not run from the notebooks. Android uses the app in `App/RobustnessMango/`, and Raspberry Pi uses `Raspberry/evaluate.py`.
 
 ### 1. Dataset
 
-Download the [MangoLeafDB dataset](https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data) from Kaggle and place it in a known location. The paths to the dataset will need to be updated within the notebooks.
+Option A (recommended for full reproducibility): download the original dataset from Kaggle:
 
-### 2. Creating MangoLeafDB-C
+- MangoLeafDB: https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data
 
-The **MangoLeafDB-C** dataset, used for robustness evaluation, was generated using an adapted script from Dan Hendrycks' [robustness repository](https://github.com/hendrycks/robustness). The modifications apply the 15 corruptions at 5 severity levels to the original MangoLeafDB images.
+Option B: use the dataset copy already present in this repository under `mangoleaf/`.
 
-The script is located in the `external/` directory. To create the dataset:
+### 2. Creating MangoLeafDB-C (corrupted benchmark)
 
-1.  Open the file `external/ImageNet-C/create_c/make_imagenet_c.py`.
-2.  Update the file to set the source path to your MangoLeafDB dataset and the destination path for the output.
-3.  Run the script to generate MangoLeafDB-C.
+The corruption generation code is located in `external/` (adapted from the ImageNet-C pipeline).
 
-### 3. Model Training
+1. Open `external/ImageNet-C/create_c/make_imagenet_c.py`
+2. Configure:
+   - **source path** (clean MangoLeafDB)
+   - **destination path** (output MangoLeafDB-C)
+3. Run the script to generate the corrupted benchmark.
 
-The training process for each model is contained in its respective Jupyter notebook in the `v2/notebooks/` directory. These notebooks handle data loading, model definition, training, and saving the final weights.
+### 3. Model Training + Conversion (notebooks)
 
-- **LCNN**: `v2/notebooks/lcnn.ipynb`
-- **MobileNetV3-Small**: `v2/notebooks/mobilenetv3_small.ipynb`
-- **EfficientNet-B0**: `v2/notebooks/efficientNetB0.ipynb`
+The training and conversion notebooks are under `scripts/v2/notebooks/`:
 
-The trained models in `.keras` format are saved to `v2/models/`. The compressed `.tflite` versions used for evaluation are located in `v2/models/compressed/`.
+- **LCNN**: `scripts/v2/notebooks/lcnn.ipynb`
+- **MobileNetV3-Small**: `scripts/v2/notebooks/mobilenetv3_small.ipynb`
+- **EfficientNet-B0**: `scripts/v2/notebooks/efficientNetB0.ipynb`
 
-### 4. Evaluation
+Models and converted artifacts are stored under:
 
-The evaluation is split across multiple notebooks, each focusing on a specific aspect of performance.
+- Keras: `scripts/v2/notebooks/models/`
+- TFLite + ZIP: `scripts/v2/notebooks/models/compressed/`
 
-- **Robustness Evaluation (Corrupted Data)**: The following notebooks apply corruptions to the dataset and evaluate the models' performance:
+### 4. Robustness (mCE) + Desktop Analysis (notebooks)
 
-  - `v2/notebooks/lccn_evaluate_corrupted_db.ipynb`
-  - `v2/notebooks/mobilenetv3_evaluate_corrupted_db.ipynb`
-  - `v2/notebooks/efficientNetB0_evaluate_corrupted_db.ipynb`
+- **Corrupted evaluation**:
+  - `scripts/v2/notebooks/lccn_evaluate_corrupted_db.ipynb`
+  - `scripts/v2/notebooks/mobilenetv3_evaluate_corrupted_db.ipynb`
+  - `scripts/v2/notebooks/efficientNetB0_evaluate_corrupted_db.ipynb`
+- **mCE + heatmaps**: `scripts/v2/notebooks/evaluate_mce.ipynb`
+- **Size / latency notebooks (desktop)**:
+  - `scripts/v2/notebooks/evaluate_size.ipynb`
+  - `scripts/v2/notebooks/evaluate_latency.ipynb`
+  - `scripts/v2/notebooks/latency_vs_mce.ipynb`
 
-- **Mean Corruption Error (mCE) Calculation**: To calculate the final mCE metric and generate comparison heatmaps, run:
+### 5. On-device Benchmarks
 
-  - `v2/notebooks/evaluate_mce.ipynb`
+#### Android (mobile app)
 
-- **Efficiency Evaluation (Latency and Model Size)**:
-  - **Latency**: `v2/notebooks/evaluate_latency.ipynb` measures inference speed (FPS).
-  - **Model Size**: `v2/notebooks/evaluate_size.ipynb` compares the storage footprint of the models.
+The benchmark application lives in `App/RobustnessMango/` (Android Studio project).
 
-### 5. Results
+1. Open `App/RobustnessMango/` in Android Studio
+2. Connect a physical Android device
+3. Build and run the app
+4. In the app:
+   - **“Iniciar Avaliação”** runs a balanced subset of **400 images** (50/class) and reports latency stats (including **P90**) and throughput (images/s).
+   - **“Avaliar Corrupção Natural (5)”** runs the corruption benchmark using severity **5** (to keep the APK size manageable).
 
-All generated plots, tables, and raw result files are stored in the `v2/results/` directory.
+The app uses **TFLite CPU** inference and caps the interpreter to **up to 4 threads** (no NNAPI/GPU delegates).
+
+The app exports JSON result files to the device **Downloads** folder.
+
+#### Raspberry Pi (Python script)
+
+The Raspberry Pi benchmark is in `Raspberry/evaluate.py`. It loads the `.tflite` models in `Raspberry/models/` and evaluates a balanced subset of the dataset in `Raspberry/dataset/mangoleaf/`.
+
+Example run:
+
+```bash
+cd Raspberry
+python3 evaluate.py --max-images 400 --warmups 10 --output results.json
+```
+
+Optional:
+
+- `--threads N` to set interpreter threads (if supported by the runtime)
+- `--only mobilenetv3_small` to run a subset of models
+
+> Dependency note (Raspberry Pi): `evaluate.py` prefers `tflite_runtime` and falls back to `tf.lite.Interpreter` if TensorFlow is installed.
+
+## Results
+
+- Notebook-generated plots/tables/results: `scripts/v2/results/`
+- Android on-device logs: exported JSON files in **Downloads**
+- Raspberry Pi output: the JSON passed via `--output` (default: `results.json`)
