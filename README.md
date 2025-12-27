@@ -18,6 +18,8 @@ For performance evaluation on real hardware, inference latency and throughput ar
 
 - **`App/RobustnessMango/`**: Android benchmark application (TFLite) used for on-device evaluation (clean accuracy + latency/throughput + corruption evaluation) and the paper sources (`artigo.tex`, `bib.bib`).
 - **`Raspberry/`**: Raspberry Pi benchmark (Python) with `evaluate.py`, plus `models/` (`.tflite`) and a dataset copy under `dataset/`.
+- **`mobile_analyses/`**: On-device metrics exported from smartphones/Raspberry (JSON) and a notebook (`metrics_analysis.ipynb`) used to analyze and visualize mobile/edge results.
+- **`final_results/`**: Consolidated, paper-ready artifacts (figures in PDF, accuracy/mCE/latency JSONs, and exported model files/sizes).
 - **`scripts/v2/`**: Previous/legacy codebase containing the notebooks, plots, tables, and intermediate artifacts used in the experiments (training, corruption evaluation, mCE computation, desktop analysis).
 - **`external/`**: Adapted ImageNet-C code used to generate the corrupted benchmark (MangoLeafDB-C).
 - **`mangoleaf/`**: A clean dataset copy (8 classes, 4000 images) used in the experiments.
@@ -50,7 +52,7 @@ pip install -r requirements.txt
 
 Option A (recommended for full reproducibility): download the original dataset from Kaggle:
 
-- MangoLeafDB: https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data
+- [MangoLeafDB (Kaggle)](https://www.kaggle.com/datasets/aryashah2k/mango-leaf-disease-dataset/data)
 
 Option B: use the dataset copy already present in this repository under `mangoleaf/`.
 
@@ -127,5 +129,7 @@ Optional:
 ## Results
 
 - Notebook-generated plots/tables/results: `scripts/v2/results/`
+- Consolidated final artifacts (figures + metrics + models): `final_results/`
+- Raw/on-device metric exports and analysis notebook: `mobile_analyses/`
 - Android on-device logs: exported JSON files in **Downloads**
 - Raspberry Pi output: the JSON passed via `--output` (default: `results.json`)
