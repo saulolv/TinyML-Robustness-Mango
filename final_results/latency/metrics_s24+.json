@@ -1,0 +1,110 @@
+{
+  "models": [
+    {
+      "modelName": "mobilenetv3_small",
+      "modelFile": "mobilenetv3_model.tflite",
+      "modelSizeBytes": 1107336,
+      "inputShape": [
+        1,
+        224,
+        224,
+        3
+      ],
+      "outputShape": [
+        1,
+        8
+      ],
+      "imagesProcessed": 400,
+      "accuracy": 1,
+      "avgLatencyMs": 2.0323967475000013,
+      "minLatencyMs": 1.58043,
+      "maxLatencyMs": 4.822109,
+      "medianLatencyMs": 1.9141405,
+      "p90LatencyMs": 2.3922027999999997,
+      "latencyStdMs": 0.47156094510916,
+      "throughputImagesPerSecond": 124.06897682135838,
+      "totalTimeMs": 3224.013047,
+      "memoryUsageBeforeBytes": 7348256,
+      "memoryUsageAfterBytes": 31731776,
+      "warmupRunsUsed": 10,
+      "labelsSource": "folders",
+      "batteryChargeBeforeUAh": 3727269,
+      "batteryChargeAfterUAh": 3727269,
+      "batteryChargeDeltaUAh": 0,
+      "batteryVoltageStartMicroV": 4180000,
+      "batteryVoltageEndMicroV": 4180000,
+      "processCpuTimeDeltaMs": 10273
+    },
+    {
+      "modelName": "efficientnet_b0",
+      "modelFile": "efficientnet_b0_mango.tflite",
+      "modelSizeBytes": 16066676,
+      "inputShape": [
+        1,
+        224,
+        224,
+        3
+      ],
+      "outputShape": [
+        1,
+        8
+      ],
+      "imagesProcessed": 400,
+      "accuracy": 1,
+      "avgLatencyMs": 25.155881532499993,
+      "minLatencyMs": 23.457813,
+      "maxLatencyMs": 34.888008,
+      "medianLatencyMs": 24.663339999999998,
+      "p90LatencyMs": 26.959762,
+      "latencyStdMs": 1.58221432302993,
+      "throughputImagesPerSecond": 31.599536018672318,
+      "totalTimeMs": 12658.413711,
+      "memoryUsageBeforeBytes": 63901760,
+      "memoryUsageAfterBytes": 73564224,
+      "warmupRunsUsed": 10,
+      "labelsSource": "folders",
+      "batteryChargeBeforeUAh": 3727269,
+      "batteryChargeAfterUAh": 3727269,
+      "batteryChargeDeltaUAh": 0,
+      "batteryVoltageStartMicroV": 4180000,
+      "batteryVoltageEndMicroV": 4180000,
+      "processCpuTimeDeltaMs": 19994
+    },
+    {
+      "modelName": "lcnn",
+      "modelFile": "lcnn_model.tflite",
+      "modelSizeBytes": 188432,
+      "inputShape": [
+        1,
+        224,
+        224,
+        3
+      ],
+      "outputShape": [
+        1,
+        8
+      ],
+      "imagesProcessed": 400,
+      "accuracy": 0.9975,
+      "avgLatencyMs": 4.4624261999999995,
+      "minLatencyMs": 4.055391,
+      "maxLatencyMs": 5.36461,
+      "medianLatencyMs": 4.3830855,
+      "p90LatencyMs": 4.7886955,
+      "latencyStdMs": 0.2606500301669464,
+      "throughputImagesPerSecond": 88.95689691101414,
+      "totalTimeMs": 4496.559726,
+      "memoryUsageBeforeBytes": 74022976,
+      "memoryUsageAfterBytes": 14356544,
+      "warmupRunsUsed": 10,
+      "labelsSource": "folders",
+      "batteryChargeBeforeUAh": 3727269,
+      "batteryChargeAfterUAh": 3727269,
+      "batteryChargeDeltaUAh": 0,
+      "batteryVoltageStartMicroV": 4180000,
+      "batteryVoltageEndMicroV": 4180000,
+      "processCpuTimeDeltaMs": 7872
+    }
+  ],
+  "timestamp": 1758655655303
+}

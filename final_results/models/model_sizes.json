@@ -1,0 +1,17 @@
+{
+    "efficientnetb0": {
+        "zip": 14.19,
+        "tflite": 15.32,
+        "keras": 16.37
+    },
+    "mobilenetv3": {
+        "zip": 3.55,
+        "tflite": 1.06,
+        "keras": 6.49
+    },
+    "lcnn": {
+        "zip": 0.61,
+        "tflite": 0.18,
+        "keras": 2.03
+    }
+}

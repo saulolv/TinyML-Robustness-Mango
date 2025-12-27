@@ -1,0 +1,63 @@
+{
+  "dataset_root": "dataset/mangoleaf",
+  "labels_file": "models/labels.txt",
+  "num_classes": 8,
+  "num_images": 400,
+  "sampling": "balanced_per_class",
+  "warmups": 10,
+  "threads": null,
+  "timestamp_utc": "2025-11-06T02:55:24Z",
+  "results": [
+    {
+      "model": "mobilenetv3_small",
+      "model_file": "models/mobilenetv3_model.tflite",
+      "images_processed": 400,
+      "correct": 400,
+      "accuracy": 1.0,
+      "latency_ms": {
+        "avg": 54.711047689998516,
+        "min": 54.27038400000583,
+        "median": 54.560526999978265,
+        "p90": 55.00401919999831,
+        "max": 67.58884200007742,
+        "std": 0.8284984054774361
+      },
+      "throughput_img_s": 13.666094644874823,
+      "total_time_ms": 29269.51776599992
+    },
+    {
+      "model": "efficientnet_b0",
+      "model_file": "models/efficientnet_b0_mango.tflite",
+      "images_processed": 400,
+      "correct": 399,
+      "accuracy": 0.9975,
+      "latency_ms": {
+        "avg": 388.3404293700005,
+        "min": 386.95837599993865,
+        "median": 387.990335999973,
+        "p90": 388.9397239999994,
+        "max": 416.5036900000132,
+        "std": 2.322418451457044
+      },
+      "throughput_img_s": 2.458257056425943,
+      "total_time_ms": 162716.91316999999
+    },
+    {
+      "model": "lcnn",
+      "model_file": "models/lcnn_model.tflite",
+      "images_processed": 400,
+      "correct": 399,
+      "accuracy": 0.9975,
+      "latency_ms": {
+        "avg": 195.79262824750003,
+        "min": 195.27994700001727,
+        "median": 195.70336950005185,
+        "p90": 196.2336801999072,
+        "max": 197.43434999986675,
+        "std": 0.32321543735670516
+      },
+      "throughput_img_s": 4.730321624614929,
+      "total_time_ms": 84560.8463320001
+    }
+  ]
+}

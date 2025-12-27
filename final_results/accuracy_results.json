@@ -1,0 +1,5 @@
+{
+    "lcnn_accuracy": 0.9965,
+    "mobilenetv3_accuracy": 0.99975,
+    "efficientnet_accuracy": 0.99975
+}
